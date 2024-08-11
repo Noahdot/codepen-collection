@@ -68,7 +68,7 @@ onMounted(() => {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: url(./images/clock.png);
+    background: url(https://i.imgur.com/ZOHY9s8.png);
     background-size: cover;
     border: 4px solid #091921;
     border-radius: 50%;
