@@ -2,45 +2,45 @@
   <div class="body">
     <div class="clock">
       <div class="hour">
-        <div class="hr" id="hr" ref="hr"></div>
+        <div class="hr" ref="hr"></div>
       </div>
       <div class="min">
-        <div class="mn" id="mn" ref="mn"></div>
+        <div class="mn" ref="mn"></div>
       </div>
       <div class="sec">
-        <div class="sc" id="sc" ref="sc"></div>
+        <div class="sc" ref="sc"></div>
       </div>
     </div>
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, onMounted } from 'vue';
 
 const deg = ref(6);
 const hr = ref(null);
 const mn = ref(null);
 const sc = ref(null);
+const isTickingMode = ref(false);
 
 const startClock = () => {
   const updateClock = () => {
     let day = new Date();
     let hh = day.getHours() * 30;
     let mm = day.getMinutes() * deg.value;
-    let ss = (day.getSeconds() + (Date.now() % 1000) / 1000) * deg.value;
-    // let ss = day.getSeconds() * deg.value;
+    
+    const tickingMode = day.getSeconds() * deg.value;
+    const sweepingMode = (day.getSeconds() + (Date.now() % 1000) / 1000) * deg.value;
+    let ss = isTickingMode.value? tickingMode: sweepingMode;
 
     hr.value.style.transform = `rotateZ(${hh + mm / 12}deg)`;
     mn.value.style.transform = `rotateZ(${mm}deg)`;
     sc.value.style.transform = `rotateZ(${ss}deg)`;
 
-    requestAnimationFrame(updateClock);
+    isTickingMode.value? setInterval(() => updateClock(), 1000): requestAnimationFrame(updateClock);
   };
 
-  // updateClock();
-  // setInterval(() => updateClock(), 1000);
   updateClock();
-  // requestAnimationFrame(updateClock);
 }
 
 onMounted(() => {
